@@ -51,26 +51,21 @@ XRPC.register("test.add", (args, kwargs) => {
   return args.reduce((a, b)=>a+b);
 });
 
-// async procedure and reply results.
-XRPC.registerAsync("test.seq", (args, kwargs, reply) => {
+// async procedure
+XRPC.registerAsync("test.async", (args, kwargs, reply) => {
   let [n, m, d] = args;
-  function sendRes(n) {
-    setTimeout(() => {
-      if (n === m) {
-        reply.replyDone(n);
-      } else {
-        reply.reply(n);
-        sendRes(n+1);
-      }
-    }, d);
-  }
-  sendRes(n);
+  setTimeout(() => {
+    reply.reply(n * m);
+  }, d);
 });
 
-// event subscribe.
-XRPC.subscribe("test.event.log", (data) => {
-  console.log(data);
+// subscribe native event.
+XRPC.subscribe("test.event.log", (args, kwargs) => {
+  console.log(args, kwargs);
 });
+
+// send event to native.
+XRPC.emit("test.event.toast", "hello");
 
 ```
 
@@ -106,6 +101,35 @@ xrpc.call("test.add", new Object[]{1, 2, 3, 4}, null)
       }
   });
 
-// emit a event.
-xrpc.emit("test.event.log", "hello");
+// subscribe js event.
+xrpc.sub("test.event.toast")
+  .map(new Func1<Event, String>() {
+      @Override
+      public String call(Event event) {
+          ReadableArray args = event.args;
+          return args.getString(0);
+      }
+  })
+  .subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(new Subscriber<String>() {
+      @Override
+      public void onCompleted() {
+          Log.i("XRPC.event.toast", "completed");
+      }
+
+      @Override
+      public void onError(Throwable e) {
+          Log.e("XRPC.event.toast", e.getMessage());
+      }
+
+      @Override
+      public void onNext(String s) {
+          Log.i("XRPC.event.toast", s);
+          Toast.makeText(getCurrentActivity(), s, Toast.LENGTH_SHORT).show();
+      }
+  });
+
+// emit event to js.
+xrpc.emit("test.event.log", new Object[]{"hello", 123}, null);
 ```

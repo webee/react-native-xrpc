@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import rx.Observable;
+import rx.subjects.AsyncSubject;
 import rx.subjects.PublishSubject;
 
 import static com.webee.react.RNXRPCClient.requests;
@@ -22,17 +24,16 @@ import static com.webee.react.RNXRPCClient.requests;
 public class RNXRPC extends ReactContextBaseJavaModule {
     public static final String XRPC_EVENT_CALL = "__XRPC.E.CALL";
     public static final String XRPC_EVENT_REPLY = "__XRPC.E.REPLY";
-    public static final String XRPC_EVENT_REPLY_DONE = "__XRPC.E.REPLY_DONE";
     public static final String XRPC_EVENT_REPLY_ERROR = "__XRPC.E.REPLY_ERROR";
     public static final String XRPC_EVENT_EVENT = "__XRPC.E.EVENT";
     private static final Map<String, Object> constants;
-    private static Map<String, Procedure> procedures = new ConcurrentHashMap<>();
+    private static final Map<String, Procedure> procedures = new ConcurrentHashMap<>();
+    private static final PublishSubject<Event> eventSubject = PublishSubject.create();
 
     static {
         constants = new HashMap<>();
         constants.put("EVENT_CALL", XRPC_EVENT_CALL);
         constants.put("EVENT_REPLY", XRPC_EVENT_REPLY);
-        constants.put("EVENT_REPLY_DONE", XRPC_EVENT_REPLY_DONE);
         constants.put("EVENT_REPLY_ERROR", XRPC_EVENT_REPLY_ERROR);
         constants.put("EVENT_EVENT", XRPC_EVENT_EVENT);
     }
@@ -52,13 +53,10 @@ public class RNXRPC extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void emit(final String event, final ReadableArray args, final ReadableMap kwargs) {
+    public void emit(final String event, final ReadableArray args) {
         switch (event) {
             case XRPC_EVENT_REPLY:
                 handleCallReply(args);
-                break;
-            case XRPC_EVENT_REPLY_DONE:
-                handleCallReplyDone(args);
                 break;
             case XRPC_EVENT_REPLY_ERROR:
                 handleCallReplyError(args);
@@ -67,14 +65,17 @@ public class RNXRPC extends ReactContextBaseJavaModule {
                 handleCall(args);
                 break;
             case XRPC_EVENT_EVENT:
-                handleEvent(args, kwargs);
+                handleEvent(args);
             default:
                 break;
         }
     }
 
-    private void handleEvent(ReadableArray xargs, ReadableMap xkwargs) {
-        // TODO: call event subscribers.
+    private void handleEvent(ReadableArray xargs) {
+        String event = xargs.getString(0);
+        ReadableArray args = xargs.getArray(1);
+        ReadableMap kwargs = xargs.getMap(2);
+        eventSubject.onNext(new Event(event, args, kwargs));
     }
 
     private void handleCall(ReadableArray xargs) {
@@ -91,14 +92,7 @@ public class RNXRPC extends ReactContextBaseJavaModule {
 
     private void handleCallReply(ReadableArray xargs) {
         String rid = xargs.getString(0);
-        PublishSubject<Reply> replySubject;
-        boolean done = xargs.getBoolean(3);
-        if (done) {
-            replySubject = RNXRPCClient.requests.remove(rid);
-        } else {
-            replySubject = RNXRPCClient.requests.get(rid);
-        }
-
+        AsyncSubject<Reply> replySubject = RNXRPCClient.requests.remove(rid);
         if (replySubject == null) {
             return;
         }
@@ -107,22 +101,12 @@ public class RNXRPC extends ReactContextBaseJavaModule {
         ReadableMap kwargs = xargs.getMap(2);
 
         replySubject.onNext(new Reply(args, kwargs));
-        if (done) {
-            replySubject.onCompleted();
-        }
-    }
-
-    private void handleCallReplyDone(ReadableArray xargs) {
-        String rid = xargs.getString(0);
-        PublishSubject<Reply> replySubject = requests.remove(rid);
-        if (replySubject != null) {
-            replySubject.onCompleted();
-        }
+        replySubject.onCompleted();
     }
 
     private void handleCallReplyError(ReadableArray xargs) {
         String rid = xargs.getString(0);
-        PublishSubject<Reply> replySubject = requests.remove(rid);
+        AsyncSubject<Reply> replySubject = requests.remove(rid);
         if (replySubject == null) {
             return;
         }
@@ -140,6 +124,10 @@ public class RNXRPC extends ReactContextBaseJavaModule {
         }
 
         replySubject.onError(new XRPCError(error, args, kwargs));
+    }
+
+    public static Observable<Event> event() {
+        return eventSubject.asObservable();
     }
 
     public static void register() {

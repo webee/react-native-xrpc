@@ -12,6 +12,7 @@ const {
 } = require('react-native');
 
 function parseArgs(res) {
+  // [undefined | null | Array, undefined | null | (Object - Array)]
   if (res instanceof Array && res.length >= 1 && res.length <= 2) {
     let [rargs, rkwargs] = res;
     if ((rargs instanceof Array === null || rargs === undefined)
@@ -41,18 +42,19 @@ class RNXRPC {
     );
   }
 
-  emit(topic, arg) {
+  // emit sent event to native.
+  emit(event, arg) {
     let [rargs, rkwargs] = parseArgs(arg);
-    XRPC.emit(topic, rargs, rkwargs);
+    XRPC.emit(XRPC.EVENT_EVENT, [event, rargs, rkwargs]);
   }
 
-  _handleEvent(data) {
-    const f = this._subscribers[proc];
-    if (f instanceof Function) {
+  _handleEvent([event, args, kwargs]) {
+    const f = this._subscribers[event];
+    if (!f instanceof Function) {
       return;
     }
     try {
-      f(data);
+      f(args, kwargs);
     }catch(err) {
       console.error("event:", err);
     }
@@ -66,18 +68,11 @@ class RNXRPC {
     let replyAPI = {
       reply: (arg) => {
         let [rargs, rkwargs] = parseArgs(arg);
-        XRPC.emit(XRPC.EVENT_REPLY, [rid, rargs, rkwargs, false], null)
-      },
-      replyDone: (arg) => {
-        let [rargs, rkwargs] = parseArgs(arg);
-        XRPC.emit(XRPC.EVENT_REPLY, [rid, rargs, rkwargs, true], null)
-      },
-      done: () => {
-        XRPC.emit(XRPC.EVENT_REPLY_DONE, [rid], null)
+        XRPC.emit(XRPC.EVENT_REPLY, [rid, rargs, rkwargs])
       },
       error: (err, arg) => {
         let [rargs, rkwargs] = parseArgs(arg);
-        XRPC.emit(XRPC.EVENT_REPLY_ERROR, [rid, err, rargs, rkwargs], null)
+        XRPC.emit(XRPC.EVENT_REPLY_ERROR, [rid, err, rargs, rkwargs])
       }
     };
 
@@ -86,7 +81,7 @@ class RNXRPC {
         f(args, kwargs, replyAPI);
       } else {
         let res = f(args, kwargs);
-        replyAPI.replyDone(res);
+        replyAPI.reply(res);
       }
     }catch (err) {
       console.error(err);
@@ -99,12 +94,13 @@ class RNXRPC {
     this._eventSub.remove();
   }
 
+  // subscribe to native event.
   subscribe(event, sub) {
     this._subscribers[event] = sub;
   }
 
-  unsubscribe(name) {
-    delete this._subscribers[name];
+  unsubscribe(event) {
+    delete this._subscribers[event];
   }
 
   register(name, proc) {
