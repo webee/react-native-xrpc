@@ -1,2 +1,5 @@
+.idea/
+lib/
+*.iml
 build/
 node_modules/

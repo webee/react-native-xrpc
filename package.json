@@ -1,20 +1,30 @@
-
 {
   "name": "react-native-xrpc",
   "version": "0.0.1",
-  "repository": "git@github.com:webee/react-native-xrpc.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webee/react-native-xrpc.git"
+  },
   "description": "enable bidirectional pub/sub and rpc between js and natives for react-native.",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "babel -w src --out-dir lib",
+    "build": "babel --compact true --minified src --out-dir lib",
+    "prepublish": "npm run build"
   },
   "keywords": [
     "react-native",
-    "bidirectional", "rpc", "pub/sub"
+    "bidirectional",
+    "rpc",
+    "pub/sub"
   ],
   "author": "webee.yw <webee.yw@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "react-native": "^0.35.+"
+    "react-native": ""
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-preset-react-native": "^1.9.0"
   }
 }

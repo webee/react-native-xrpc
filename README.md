@@ -1,5 +1,6 @@
-
 # react-native-xrpc
+
+!!Now, only android is finished.
 
 ## Getting started
 
@@ -20,19 +21,17 @@
 4. Run your project (`Cmd+R`)<
 
 #### Android
-
-1. Open up `android/app/src/main/java/[...]/MainActivity.java`
-  - Add `import com.reactlibrary.RNXrpcPackage;` to the imports at the top of the file
-  - Add `new RNXrpcPackage()` to the list returned by the `getPackages()` method
-2. Append the following lines to `android/settings.gradle`:
+1. Append the following lines to `android/settings.gradle`:
   	```
   	include ':react-native-xrpc'
   	project(':react-native-xrpc').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-xrpc/android')
   	```
-3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
+2. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
       compile project(':react-native-xrpc')
   	```
+3. Add Package
+  Add new RNXRPCPackage() to ReactInstanceManager builder.
 
 #### Windows
 [Read it! :D](https://github.com/ReactWindows/react-native)
@@ -45,9 +44,68 @@
 
 ## Usage
 ```javascript
-import RNXrpc from 'react-native-xrpc';
+import XRPC from 'react-native-xrpc';
 
-// TODO: What do with the module?
-RNXrpc;
+// sync procedure
+XRPC.register("test.add", (args, kwargs) => {
+  return args.reduce((a, b)=>a+b);
+});
+
+// async procedure and reply results.
+XRPC.registerAsync("test.seq", (args, kwargs, reply) => {
+  let [n, m, d] = args;
+  function sendRes(n) {
+    setTimeout(() => {
+      if (n === m) {
+        reply.replyDone(n);
+      } else {
+        reply.reply(n);
+        sendRes(n+1);
+      }
+    }, d);
+  }
+  sendRes(n);
+});
+
+// event subscribe.
+XRPC.subscribe("test.event.log", (data) => {
+  console.log(data);
+});
+
 ```
-  
+
+```java
+// create a xrpc client with a ReactInstanceManager.
+RNXRPCClient xrpc = new RNXRPCClient(instanceManager);
+
+// call a js procedure.
+xrpc.call("test.add", new Object[]{1, 2, 3, 4}, null)
+  .map(new Func1<Reply, Integer>() {
+      @Override
+      public Integer call(Reply reply) {
+          ReadableArray args = reply.args;
+          return args.getInt(0);
+      }
+  })
+  .subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(new Subscriber<Integer>() {
+      @Override
+      public void onCompleted() {
+          Log.i("XRPC.add", "completed");
+      }
+
+      @Override
+      public void onError(Throwable e) {
+          Log.e("XRPC.add", e.getMessage());
+      }
+
+      @Override
+      public void onNext(Integer sum) {
+          Log.i("XRPC.add", sum.toString());
+      }
+  });
+
+// emit a event.
+xrpc.emit("test.event.log", "hello");
+```
