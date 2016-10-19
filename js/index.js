@@ -11,41 +11,42 @@ const {
   }
 } = require('react-native');
 
-function parseArgs(res) {
-  // [undefined | null | Array, undefined | null | (Object - Array)]
-  if (res instanceof Array && res.length >= 1 && res.length <= 2) {
-    let [rargs, rkwargs] = res;
-    if ((rargs instanceof Array === null || rargs === undefined)
-    && (rkwargs === null || rkwargs === undefined || (! rkwargs instanceof Array && rkwargs instanceof Object))) {
-      return [rargs, rkwargs];
+function parseArgs(args) {
+  // [...] => [[...]]
+  // [..., undefined, Object] => [[...], Object]
+  if (args.length >= 2) {
+    let s, rkwargs = args.slice(-2);
+    if (s === undefined && (! rkwargs instanceof Array && rkwargs instanceof Object)) {
+      return [args.slice(0, -2), rkwargs];
     }
   }
-  return [[res]]
+  return [args];
 }
 
 class RNXRPC {
   _procedures: Object;
   _subscribers: Object;
-  _callSub: Object;
-  _eventSub: Object;
+  _xrpcSub: Object;
 
   constructor() {
     this._procedures = {};
     this._subscribers = {};
-    this._callSub = NativeAppEventEmitter.addListener(
-      XRPC.EVENT_CALL,
-      this._handleCall.bind(this)
-    );
-    this._eventSub = NativeAppEventEmitter.addListener(
-      XRPC.EVENT_EVENT,
-      this._handleEvent.bind(this)
+    this._xrpcSub = NativeAppEventEmitter.addListener(
+      XRPC.XRPC_EVENT,
+      this._handleXRPCEvent.bind(this)
     );
   }
 
-  // emit sent event to native.
-  emit(event, arg) {
-    let [rargs, rkwargs] = parseArgs(arg);
-    XRPC.emit(XRPC.EVENT_EVENT, [event, rargs, rkwargs]);
+  _handleXRPCEvent([e, ...args]) {
+    switch (e) {
+      case XRPC.EVENT_CALL:
+      this._handleCall(args);
+      break;
+      case XRPC.EVENT_EVENT:
+      this._handleEvent(args);
+      break;
+      default:
+    }
   }
 
   _handleEvent([event, args, kwargs]) {
@@ -66,12 +67,12 @@ class RNXRPC {
       return;
     }
     let replyAPI = {
-      reply: (arg) => {
-        let [rargs, rkwargs] = parseArgs(arg);
+      reply: (...args) => {
+        let [rargs, rkwargs] = parseArgs(args);
         XRPC.emit(XRPC.EVENT_REPLY, [rid, rargs, rkwargs])
       },
-      error: (err, arg) => {
-        let [rargs, rkwargs] = parseArgs(arg);
+      error: (err, ...args) => {
+        let [rargs, rkwargs] = parseArgs(args);
         XRPC.emit(XRPC.EVENT_REPLY_ERROR, [rid, err, rargs, rkwargs])
       }
     };
@@ -90,8 +91,13 @@ class RNXRPC {
   }
 
   destroy() {
-    this._callSub.remove();
-    this._eventSub.remove();
+    this._xrpcSub.remove();
+  }
+
+  // emit sent event to native.
+  emit(event, ...args) {
+    let [rargs, rkwargs] = parseArgs(args);
+    XRPC.emit(XRPC.EVENT_EVENT, [event, rargs, rkwargs]);
   }
 
   // subscribe to native event.
@@ -101,6 +107,12 @@ class RNXRPC {
 
   unsubscribe(event) {
     delete this._subscribers[event];
+  }
+
+  // call native procedure.
+  call(proc, ...args) {
+    let [rargs, rkwargs] = parseArgs(args);
+    return XRPC.call(proc, rargs, rkwargs);
   }
 
   register(name, proc) {

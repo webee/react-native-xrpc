@@ -43,6 +43,7 @@
 
 
 ## Usage
+js:
 ```javascript
 import XRPC from 'react-native-xrpc';
 
@@ -59,6 +60,11 @@ XRPC.registerAsync("test.async", (args, kwargs, reply) => {
   }, d);
 });
 
+// call a native procedure.
+XRPC.call("test.proc.add", 1, 2, 3, 4, 5)
+    .then(sum => XRPC.emit("test.event.toast", `sum: ${sum}`))
+    .catch(err => console.log(err));
+
 // subscribe native event.
 XRPC.subscribe("test.event.log", (args, kwargs) => {
   console.log(args, kwargs);
@@ -69,6 +75,7 @@ XRPC.emit("test.event.toast", "hello");
 
 ```
 
+Android:
 ```java
 // create a xrpc client with a ReactInstanceManager.
 RNXRPCClient xrpc = new RNXRPCClient(instanceManager);
@@ -98,6 +105,32 @@ xrpc.call("test.add", new Object[]{1, 2, 3, 4}, null)
       @Override
       public void onNext(Integer sum) {
           Log.i("XRPC.add", sum.toString());
+      }
+  });
+
+// register a native procedure.
+Client.xrpc.register("test.proc.add")
+  .subscribeOn(Schedulers.io())
+  .observeOn(Schedulers.computation())
+  .subscribe(new Subscriber<Request>() {
+      @Override
+      public void onCompleted() {
+          Log.i("XRPC.proc.add", "completed");
+      }
+
+      @Override
+      public void onError(Throwable e) {
+          Log.e("XRPC.proc.add", e.getMessage());
+      }
+
+      @Override
+      public void onNext(Request request) {
+          int sum = 0;
+          ReadableArray args = request.args;
+          for (int i = 0; i < args.size(); i++) {
+              sum += args.getInt(i);
+          }
+          request.promise.resolve(sum);
       }
   });
 
