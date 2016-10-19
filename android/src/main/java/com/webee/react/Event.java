@@ -1,5 +1,6 @@
 package com.webee.react;
 
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
@@ -8,11 +9,13 @@ import com.facebook.react.bridge.ReadableMap;
  */
 
 public class Event {
+    public final ReactApplicationContext context;
     public final String event;
     public final ReadableArray args;
     public final ReadableMap kwargs;
 
-    public Event(String name, ReadableArray args, ReadableMap kwargs) {
+    public Event(ReactApplicationContext context, String name, ReadableArray args, ReadableMap kwargs) {
+        this.context = context;
         this.event =name;
         this.args = args;
         this.kwargs = kwargs;

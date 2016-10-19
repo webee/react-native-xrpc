@@ -1,6 +1,9 @@
 
 package com.webee.react;
 
+import android.os.Bundle;
+
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -20,25 +23,19 @@ import rx.subjects.PublishSubject;
 import static com.webee.react.RNXRPCClient.requests;
 
 @ReactModule(name = "XRPC")
-public class RNXRPC extends ReactContextBaseJavaModule {
+public class RNXRPCModule extends ReactContextBaseJavaModule {
     public static final String XRPC_EVENT = "__XRPC__";
     public static final int XRPC_EVENT_CALL = 0;
     public static final int XRPC_EVENT_REPLY = 1;
     public static final int XRPC_EVENT_REPLY_ERROR = 2;
     public static final int XRPC_EVENT_EVENT = 3;
-    private static final Map<String, Object> constants;
+    public static final Map<String, Bundle> constants = new HashMap<>();
     private static final PublishSubject<Event> eventSubject = PublishSubject.create();
 
     static {
-        constants = new HashMap<>();
-        constants.put("XRPC_EVENT", XRPC_EVENT);
-        constants.put("EVENT_CALL", XRPC_EVENT_CALL);
-        constants.put("EVENT_REPLY", XRPC_EVENT_REPLY);
-        constants.put("EVENT_REPLY_ERROR", XRPC_EVENT_REPLY_ERROR);
-        constants.put("EVENT_EVENT", XRPC_EVENT_EVENT);
     }
 
-    public RNXRPC(ReactApplicationContext reactContext) {
+    public RNXRPCModule(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
@@ -49,7 +46,16 @@ public class RNXRPC extends ReactContextBaseJavaModule {
 
     @Override
     public Map<String, Object> getConstants() {
-        return constants;
+        Map<String, Object> c = new HashMap<>();
+        c.put("_XRPC_EVENT", XRPC_EVENT);
+        c.put("_EVENT_CALL", XRPC_EVENT_CALL);
+        c.put("_EVENT_REPLY", XRPC_EVENT_REPLY);
+        c.put("_EVENT_REPLY_ERROR", XRPC_EVENT_REPLY_ERROR);
+        c.put("_EVENT_EVENT", XRPC_EVENT_EVENT);
+        for (Map.Entry<String, Bundle> entry : constants.entrySet()) {
+            c.put(entry.getKey(), Arguments.fromBundle(entry.getValue()));
+        }
+        return c;
     }
 
     @ReactMethod
@@ -71,14 +77,14 @@ public class RNXRPC extends ReactContextBaseJavaModule {
     @ReactMethod
     public void call(final String proc, final ReadableArray args, final ReadableMap kwargs, final Promise promise) {
         Subscriber<? super Request> subscriber = RNXRPCClient.procedures.get(proc);
-        subscriber.onNext(new Request(args, kwargs, promise));
+        subscriber.onNext(new Request(getReactApplicationContext(), args, kwargs, promise));
     }
 
     private void handleEvent(ReadableArray xargs) {
         String event = xargs.getString(0);
         ReadableArray args = xargs.getArray(1);
         ReadableMap kwargs = xargs.getMap(2);
-        eventSubject.onNext(new Event(event, args, kwargs));
+        eventSubject.onNext(new Event(getReactApplicationContext(), event, args, kwargs));
     }
 
     private void handleCallReply(ReadableArray xargs) {

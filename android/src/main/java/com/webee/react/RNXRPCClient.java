@@ -38,13 +38,13 @@ public class RNXRPCClient {
      */
     public void emit(final String event, final Object[] args, final Bundle kwargs) {
         WritableArray data = Arguments.createArray();
-        data.pushInt(RNXRPC.XRPC_EVENT_EVENT);
+        data.pushInt(RNXRPCModule.XRPC_EVENT_EVENT);
         data.pushString(event);
         data.pushArray(args != null ? Arguments.fromJavaArgs(args) : null);
         data.pushMap(kwargs != null ? Arguments.fromBundle(kwargs) : null);
 
         instanceManager.getCurrentReactContext().getJSModule(RCTNativeAppEventEmitter.class)
-                .emit(RNXRPC.XRPC_EVENT, data);
+                .emit(RNXRPCModule.XRPC_EVENT, data);
     }
 
     /**
@@ -53,7 +53,7 @@ public class RNXRPCClient {
      * @return
      */
     public Observable<Event> sub(final String event) {
-        return RNXRPC.event().filter(new Func1<Event, Boolean>() {
+        return RNXRPCModule.event().filter(new Func1<Event, Boolean>() {
             @Override
             public Boolean call(Event e) {
                 return e.event.equals(event);
@@ -75,14 +75,14 @@ public class RNXRPCClient {
         requests.put(rid, replySubject);
 
         WritableArray data = Arguments.createArray();
-        data.pushInt(RNXRPC.XRPC_EVENT_CALL);
+        data.pushInt(RNXRPCModule.XRPC_EVENT_CALL);
         data.pushString(rid);
         data.pushString(proc);
         data.pushArray(args != null ? Arguments.fromJavaArgs(args) : null);
         data.pushMap(kwargs != null ? Arguments.fromBundle(kwargs) : null);
 
         instanceManager.getCurrentReactContext().getJSModule(RCTNativeAppEventEmitter.class)
-                .emit(RNXRPC.XRPC_EVENT, data);
+                .emit(RNXRPCModule.XRPC_EVENT, data);
 
         return replySubject;
     }

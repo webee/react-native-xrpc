@@ -29,20 +29,21 @@ class RNXRPC {
   _xrpcSub: Object;
 
   constructor() {
+    this.c = XRPC;
     this._procedures = {};
     this._subscribers = {};
     this._xrpcSub = NativeAppEventEmitter.addListener(
-      XRPC.XRPC_EVENT,
+      XRPC._XRPC_EVENT,
       this._handleXRPCEvent.bind(this)
     );
   }
 
   _handleXRPCEvent([e, ...args]) {
     switch (e) {
-      case XRPC.EVENT_CALL:
+      case XRPC._EVENT_CALL:
       this._handleCall(args);
       break;
-      case XRPC.EVENT_EVENT:
+      case XRPC._EVENT_EVENT:
       this._handleEvent(args);
       break;
       default:
@@ -69,11 +70,11 @@ class RNXRPC {
     let replyAPI = {
       reply: (...args) => {
         let [rargs, rkwargs] = parseArgs(args);
-        XRPC.emit(XRPC.EVENT_REPLY, [rid, rargs, rkwargs])
+        XRPC.emit(XRPC._EVENT_REPLY, [rid, rargs, rkwargs])
       },
       error: (err, ...args) => {
         let [rargs, rkwargs] = parseArgs(args);
-        XRPC.emit(XRPC.EVENT_REPLY_ERROR, [rid, err, rargs, rkwargs])
+        XRPC.emit(XRPC._EVENT_REPLY_ERROR, [rid, err, rargs, rkwargs])
       }
     };
 
@@ -97,7 +98,7 @@ class RNXRPC {
   // emit sent event to native.
   emit(event, ...args) {
     let [rargs, rkwargs] = parseArgs(args);
-    XRPC.emit(XRPC.EVENT_EVENT, [event, rargs, rkwargs]);
+    XRPC.emit(XRPC._EVENT_EVENT, [event, rargs, rkwargs]);
   }
 
   // subscribe to native event.

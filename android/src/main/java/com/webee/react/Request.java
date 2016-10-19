@@ -1,6 +1,7 @@
 package com.webee.react;
 
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
@@ -9,11 +10,13 @@ import com.facebook.react.bridge.ReadableMap;
  */
 
 public class Request {
+    public final ReactApplicationContext context;
     public final ReadableArray args;
     public final ReadableMap kwargs;
     public final Promise promise;
 
-    public Request(ReadableArray args, ReadableMap kwargs, Promise promise) {
+    public Request(ReactApplicationContext context, ReadableArray args, ReadableMap kwargs, Promise promise) {
+        this.context = context;
         this.args = args;
         this.kwargs = kwargs;
         this.promise = promise;
