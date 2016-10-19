@@ -134,15 +134,32 @@ Client.xrpc.register("test.proc.add")
       }
   });
 
+// register native procedure.
+  Client.xrpc.register("test.proc.toast")
+    .subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe(new Subscriber<Request>() {
+        @Override
+        public void onCompleted() {
+            Log.i("XRPC.proc.toast", "completed");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.e("XRPC.proc.toast", e.getMessage());
+        }
+
+        @Override
+        public void onNext(Request request) {
+            ReadableArray args = request.args;
+            String s = args.getString(0);
+            int duration = args.getInt(1);
+            Toast.makeText(request.context, s, duration).show();
+        }
+    });
+
 // subscribe js event.
 xrpc.sub("test.event.toast")
-  .map(new Func1<Event, String>() {
-      @Override
-      public String call(Event event) {
-          ReadableArray args = event.args;
-          return args.getString(0);
-      }
-  })
   .subscribeOn(Schedulers.io())
   .observeOn(AndroidSchedulers.mainThread())
   .subscribe(new Subscriber<String>() {
@@ -157,9 +174,12 @@ xrpc.sub("test.event.toast")
       }
 
       @Override
-      public void onNext(String s) {
+      public void onNext(Event e) {
+          ReadableArray args = event.args;
+          String s = args.getString(0);
+          int duration = args.getInt(1);
           Log.i("XRPC.event.toast", s);
-          Toast.makeText(getCurrentActivity(), s, Toast.LENGTH_SHORT).show();
+          Toast.makeText(e.context, s, duration).show();
       }
   });
 
