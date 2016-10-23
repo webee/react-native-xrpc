@@ -29,7 +29,7 @@ class RNXRPC {
   _xrpcSub: Object;
 
   constructor() {
-    this.c = XRPC;
+    this.C = XRPC.C;
     this._procedures = {};
     this._subscribers = {};
     this._xrpcSub = NativeAppEventEmitter.addListener(
