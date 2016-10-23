@@ -29,14 +29,16 @@ public class RNXRPCModule extends ReactContextBaseJavaModule {
     public static final int XRPC_EVENT_REPLY = 1;
     public static final int XRPC_EVENT_REPLY_ERROR = 2;
     public static final int XRPC_EVENT_EVENT = 3;
-    public static final Map<String, Bundle> constants = new HashMap<>();
     private static final PublishSubject<Event> eventSubject = PublishSubject.create();
-
-    static {
-    }
+    private Map<String, Bundle> extraConstants;
 
     public RNXRPCModule(ReactApplicationContext reactContext) {
         super(reactContext);
+    }
+
+    public RNXRPCModule(ReactApplicationContext reactContext, Map<String, Bundle>extraConstants) {
+        super(reactContext);
+        this.extraConstants = extraConstants;
     }
 
     @Override
@@ -52,9 +54,13 @@ public class RNXRPCModule extends ReactContextBaseJavaModule {
         c.put("_EVENT_REPLY", XRPC_EVENT_REPLY);
         c.put("_EVENT_REPLY_ERROR", XRPC_EVENT_REPLY_ERROR);
         c.put("_EVENT_EVENT", XRPC_EVENT_EVENT);
-        for (Map.Entry<String, Bundle> entry : constants.entrySet()) {
-            c.put(entry.getKey(), Arguments.fromBundle(entry.getValue()));
+        Bundle d = new Bundle();
+        if (extraConstants != null) {
+            for (Map.Entry<String, Bundle> entry : extraConstants.entrySet()) {
+                d.putBundle(entry.getKey(), entry.getValue());
+            }
         }
+        c.put("C", Arguments.fromBundle(d));
         return c;
     }
 
@@ -109,16 +115,8 @@ public class RNXRPCModule extends ReactContextBaseJavaModule {
         }
 
         String error = xargs.getString(1);
-
-        int s = xargs.size();
-        ReadableArray args = null;
-        ReadableMap kwargs = null;
-        if (s > 2) {
-            args = xargs.getArray(2);
-        }
-        if (s > 3) {
-            kwargs = xargs.getMap(3);
-        }
+        ReadableArray args = xargs.getArray(2);
+        ReadableMap kwargs = xargs.getMap(3);
 
         replySubject.onError(new XRPCError(error, args, kwargs));
     }
