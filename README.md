@@ -48,7 +48,7 @@ Or: good luck!
 
 
 ## Usage
-Android:
+### Android
 helpers
 ```java
 // react native setup.
@@ -193,7 +193,7 @@ xrpc.sub("test.event.toast")
 xrpc.emit("test.event.log", new Object[]{"hello", 123}, null);
 ```
 
-IOS:
+### IOS
 helper
 ```object-c
 // setup react native bridge.
@@ -215,7 +215,7 @@ xrpc
 ```object-c
 ```
 
-js:
+### js
 helper
 ```javascript
 // if you use the helper to start a module
