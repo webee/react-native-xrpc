@@ -15,12 +15,12 @@ function parseArgs(args) {
   // [...] => [[...]]
   // [..., undefined, Object] => [[...], Object]
   if (args.length >= 2) {
-    let s, rkwargs = args.slice(-2);
-    if (s === undefined && (! rkwargs instanceof Array && rkwargs instanceof Object)) {
+    let [s, rkwargs] = args.slice(-2);
+    if (s === undefined && (!(rkwargs instanceof Array) && (rkwargs instanceof Object))) {
       return [args.slice(0, -2), rkwargs];
     }
   }
-  return [args];
+  return [args, {}];
 }
 
 class RNXRPC {
@@ -51,8 +51,8 @@ class RNXRPC {
   }
 
   _handleEvent([event, args, kwargs]) {
-    const f = this._subscribers[event];
-    if (!f instanceof Function) {
+    let f = this._subscribers[event];
+    if (!(f instanceof Function)) {
       return;
     }
     try {
@@ -63,8 +63,8 @@ class RNXRPC {
   }
 
   _handleCall([rid, proc, args, kwargs]) {
-    const f = this._procedures[proc];
-    if (! f instanceof Function) {
+    let f = this._procedures[proc];
+    if (!(f instanceof Function)) {
       return;
     }
     let replyAPI = {
@@ -102,6 +102,8 @@ class RNXRPC {
   }
 
   // subscribe to native event.
+  // NOTE:
+  // one event one subscriber, to support other subscribers, do it in sub.
   subscribe(event, sub) {
     this._subscribers[event] = sub;
   }
