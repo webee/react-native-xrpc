@@ -1,7 +1,5 @@
 # react-native-xrpc
 
-!!Now, only android is finished.
-
 ## Getting started
 
 `$ npm install react-native-xrpc --save`
@@ -14,10 +12,16 @@
 
 
 #### iOS
-
+update Podfile
+```
+pod 'RNXRPC', :path => '../node_modules/react-native-xrpc', :subspecs => [
+        'XRPC',
+    ]
+```
+Or: good luck!
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
 2. Go to `node_modules` ➜ `react-native-xrpc` and add `RNXrpc.xcodeproj`
-3. In XCode, in the project navigator, select your project. Add `libRNXrpc.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+3. In XCode, in the project navigator, select your project. Add `libRNXRPC.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 4. Run your project (`Cmd+R`)<
 
 #### Android
@@ -43,38 +47,6 @@
 
 
 ## Usage
-js:
-```javascript
-import XRPC from 'react-native-xrpc';
-
-// sync procedure
-XRPC.register("test.add", (args, kwargs) => {
-  return args.reduce((a, b)=>a+b);
-});
-
-// async procedure
-XRPC.registerAsync("test.async", (args, kwargs, reply) => {
-  let [n, m, d] = args;
-  setTimeout(() => {
-    reply.reply(n * m);
-  }, d);
-});
-
-// call a native procedure.
-XRPC.call("test.proc.add", 1, 2, 3, 4, 5)
-    .then(sum => XRPC.emit("test.event.toast", `sum: ${sum}`))
-    .catch(err => console.log(err));
-
-// subscribe native event.
-XRPC.subscribe("test.event.log", (args, kwargs) => {
-  console.log(args, kwargs);
-});
-
-// send event to native.
-XRPC.emit("test.event.toast", "hello");
-
-```
-
 Android:
 ```java
 // create a xrpc client with a ReactInstanceManager.
@@ -185,4 +157,41 @@ xrpc.sub("test.event.toast")
 
 // emit event to js.
 xrpc.emit("test.event.log", new Object[]{"hello", 123}, null);
+```
+
+IOS:
+```object-c
+// TODO:
+```
+
+js:
+```javascript
+import XRPC from 'react-native-xrpc';
+
+// sync procedure
+XRPC.register("test.add", (args, kwargs) => {
+  return args.reduce((a, b)=>a+b);
+});
+
+// async procedure
+XRPC.registerAsync("test.async", (args, kwargs, reply) => {
+  let [n, m, d] = args;
+  setTimeout(() => {
+    reply.reply(n * m);
+  }, d);
+});
+
+// call a native procedure.
+XRPC.call("test.proc.add", 1, 2, 3, 4, 5)
+    .then(sum => XRPC.emit("test.event.toast", `sum: ${sum}`))
+    .catch(err => console.log(err));
+
+// subscribe native event.
+XRPC.subscribe("test.event.log", (args, kwargs) => {
+  console.log(args, kwargs);
+});
+
+// send event to native.
+XRPC.emit("test.event.toast", "hello");
+
 ```
