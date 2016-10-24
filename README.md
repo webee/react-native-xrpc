@@ -16,6 +16,7 @@ update Podfile
 ```
 pod 'RNXRPC', :path => '../node_modules/react-native-xrpc', :subspecs => [
         'XRPC',
+        'Helper', // helpers.
     ]
 ```
 Or: good luck!
@@ -48,6 +49,39 @@ Or: good luck!
 
 ## Usage
 Android:
+helpers
+```java
+// react native setup.
+//
+// initialize RNXRPCModule constants;
+Bundle c = new Bundle();
+c.putInt("SHORT", Toast.LENGTH_SHORT);
+c.putInt("LONG", Toast.LENGTH_LONG);
+Map<String, Bundle> extraConstants = new HashMap<>();
+extraConstants.put("Toast", c);
+
+// extra packages.
+List<ReactPackage> packages = Arrays.asList(
+        new RealmReactPackage(),
+        new RNXRPCPackage(extraConstants),
+        new MyReactPackage()
+);
+RN.setup(this, BuildConfig.DEBUG, packages);
+
+// Now:
+// RN.xrpc() -> <RNXRPC>
+// RN.inst() -> <ReactInstanceManager>
+
+// add to mainifest
+<activity
+    android:name="com.webee.react.helper.ReactNativeActivity"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+
+// then, start a module
+startActivity(ReactNativeActivity.getStartIntent(this, "HelloWorld", null));
+```
+
+xrpc
 ```java
 // create a xrpc client with a ReactInstanceManager.
 RNXRPCClient xrpc = new RNXRPCClient(instanceManager);
@@ -160,11 +194,37 @@ xrpc.emit("test.event.log", new Object[]{"hello", 123}, null);
 ```
 
 IOS:
+helper
 ```object-c
-// TODO:
+// setup react native bridge.
+//
+[RN setupWithEnv: env
+         andPort: 8081
+ andExtraModules: @[[[RNXRPC alloc] initWithExtraConstants:@{@"Toast": @{@"SHORT":@0, @"LONG":@1}}]]
+   launchOptions: nil];
+
+// Now
+// [RN xrpc] -> <RNXRPC>
+// [RN bridge] -> <RCTBridge>
+
+// then, start a module
+UIViewController* vc = [[RNViewController alloc] initWithModule:@"HelloWorld" initialProperties:nil];
+[self presentViewController:vc animated:YES completion:nil];
+```
+xrpc
+```object-c
 ```
 
 js:
+helper
+```javascript
+// if you use the helper to start a module
+// this.props.appInstID is set for you, it's the unique module id.
+XRPC.emit("native.app.exit", appInstID) //will exit this module.
+//if appInstID is undefined, will exit all modules(most time, you only have just one);
+```
+
+xrpc
 ```javascript
 import XRPC from 'react-native-xrpc';
 

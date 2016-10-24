@@ -11,7 +11,6 @@
 #import "RCTLog.h"
 
 @interface RNXRPC()
-@property (nonatomic, strong, readonly) NSDictionary* extraConstants;
 @end
 
 @implementation RNXRPC
@@ -21,6 +20,9 @@ NSInteger const XRPC_EVENT_CALL = 0;
 NSInteger const XRPC_EVENT_REPLY = 1;
 NSInteger const XRPC_EVENT_REPLY_ERROR = 2;
 NSInteger const XRPC_EVENT_EVENT = 3;
+
+static NSDictionary* extraConstants;
+
 static NSMutableDictionary<NSString*, NSMutableDictionary<NSString*, RNXRPCOnEventBlock>*>* subscribers;
 static NSLock* subLock;
 static NSMutableDictionary<NSString*, RNXRPCOnReplyBlock>* requests;
@@ -29,6 +31,7 @@ static NSLock* reqLock;
 @synthesize bridge = _bridge;
 
 + (void)initialize {
+    extraConstants = @[];
     subscribers = [NSMutableDictionary new];
     subLock = [[NSLock alloc] init];
     
@@ -43,9 +46,7 @@ static NSLock* reqLock;
 - (instancetype) initWithExtraConstants:(NSDictionary*)constants {
     if (self = [super init]) {
         if (constants != nil) {
-            _extraConstants = constants;
-        } else {
-            _extraConstants = @{};
+            extraConstants = constants;
         }
     }
     return self;
@@ -63,7 +64,7 @@ RCT_EXPORT_MODULE(XRPC);
               @"_EVENT_REPLY": [NSNumber numberWithInteger:XRPC_EVENT_REPLY],
               @"_EVENT_REPLY_ERROR": [NSNumber numberWithInteger:XRPC_EVENT_REPLY_ERROR],
               @"_EVENT_EVENT": [NSNumber numberWithInteger:XRPC_EVENT_EVENT],
-              @"C": _extraConstants
+              @"C": extraConstants
               };
 }
 

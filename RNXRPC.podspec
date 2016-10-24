@@ -21,6 +21,13 @@ Pod::Spec.new do |s|
   s.subspec 'XRPC' do |ss|
     ss.dependency 'React/Core'
     ss.source_files        = "ios/**/*.{h,m,swift}"
+    ss.exclude_files       = "ios/helper"
+    ss.pod_target_xcconfig = { "CLANG_CXX_LANGUAGE_STANDARD" => "c++14" }
+  end
+
+  s.subspec 'Helper' do |ss|
+    ss.dependency 'RNXRPC/XRPC'
+    ss.source_files        = "ios/helper/**/*.{h,m,swift}"
     ss.pod_target_xcconfig = { "CLANG_CXX_LANGUAGE_STANDARD" => "c++14" }
   end
 end
