@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://github.com/webee/react-native-xrpc.git"
   },
-  "description": "enable bidirectional pub/sub and rpc between js and natives for react-native.",
+  "description": "rpc, pub/sub between js and natives both way and some helpers for react-native.",
   "main": "./dist/index.js",
   "scripts": {
     "dev": "babel -w js --out-dir dist",
@@ -18,7 +18,8 @@
     "rpc",
     "pub/sub",
     "event",
-    "api"
+    "api",
+    "helper"
   ],
   "author": "webee.yw <webee.yw@gmail.com>",
   "license": "MIT",
