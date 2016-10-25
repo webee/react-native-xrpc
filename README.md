@@ -212,16 +212,24 @@ UIViewController* vc = [[RNViewController alloc] initWithModule:@"HelloWorld" in
 [self presentViewController:vc animated:YES completion:nil];
 ```
 xrpc
-```object-c
+```c
+// refer RNXRPCClient.{h,m}
 ```
 
 ### js
 helper
 ```javascript
-// if you use the helper to start a module
+import XRPC, {exitApp, EntryComponent} from 'react-native-xrpc'
+// if you use the helper(android, ios) to start a module
 // this.props.appInstID is set for you, it's the unique module id.
-XRPC.emit("native.app.exit", appInstID) //will exit this module.
-//if appInstID is undefined, will exit all modules(most time, you only have just one);
+exitApp(appInstID)  // will exit this react app instance.
+                    //if appInstID is undefined, will exit all modules(most time, you only have just one);
+
+// extends from EntryComponent for your entry module.
+// this will handle android back for you.
+class MyModuleEntry extends EntryComponent {
+  ...
+}
 ```
 
 xrpc
@@ -243,7 +251,7 @@ XRPC.registerAsync("test.async", (args, kwargs, reply) => {
 
 // call a native procedure.
 XRPC.call("test.proc.add", 1, 2, 3, 4, 5)
-    .then(sum => XRPC.emit("test.event.toast", `sum: ${sum}`))
+    .then(sum => XRPC.call("test.proc.toast", `sum: ${sum}`, XRPC.C.Toast.SHORT))
     .catch(err => console.log(err));
 
 // subscribe native event.

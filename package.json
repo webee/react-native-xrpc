@@ -1,6 +1,6 @@
 {
   "name": "react-native-xrpc",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/webee/react-native-xrpc.git"
@@ -16,11 +16,14 @@
     "react-native",
     "bidirectional",
     "rpc",
-    "pub/sub"
+    "pub/sub",
+    "event",
+    "api"
   ],
   "author": "webee.yw <webee.yw@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
+    "react": "*",
     "react-native": "*"
   },
   "devDependencies": {
