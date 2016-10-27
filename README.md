@@ -77,7 +77,7 @@ RN.xrpc()...
 
 // call a js procedure with context.
 // context is a <key:value> bundle.
-xrpc.call("test.add", context, new Object[]{1, 2, 3, 4}, null)....
+xrpc.call("test.user.add", context, new Object[]{1, 2, 3, 4}, null)....
 
 // call a js procedure.
 xrpc.call("test.add", new Object[]{1, 2, 3, 4}, null)
@@ -187,7 +187,7 @@ xrpc.emit("test.event.log", new Object[]{"hello", 123}, null);
 
 // emit event to js with context.
 // context is a <key:value> bundle.
-xrpc.emit("test.event.log", context, new Object[]{"hello", 123}, null);
+xrpc.emit("test.user.event.log", context, new Object[]{"hello", 123}, null);
 ```
 
 ### IOS
