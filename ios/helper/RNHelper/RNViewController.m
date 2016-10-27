@@ -53,7 +53,7 @@ static NSString* const APP_EXIT_EVENT = @"native.app.exit";
         // subscribe exit app event.
         _appExitSubID = [[RN xrpc] sub:APP_EXIT_EVENT onEvent:^(RNXRPCEvent *event) {
             NSString* aid = event.args[0];
-            if (aid == nil) {
+            if (aid == nil || aid == [NSNull null]) {
                 [weakSelf dismissViewControllerAnimated:YES completion:nil];
             } else {
                 if ([weakSelf.appInstID isEqualToString:aid]) {
