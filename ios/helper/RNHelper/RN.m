@@ -36,4 +36,8 @@ static RNXRPCClient* xrpc;
 + (RNXRPCClient*) xrpc{
     return xrpc;
 }
+
++ (RNXRPCClient*) newXrpc:(NSDictionary*)context {
+    return [[RNXRPCClient alloc] initWithReactBridge:bridge andDefaultContext:context];
+}
 @end

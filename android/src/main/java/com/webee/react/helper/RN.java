@@ -1,6 +1,7 @@
 package com.webee.react.helper;
 
 import android.app.Application;
+import android.os.Bundle;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactPackage;
@@ -40,7 +41,20 @@ public class RN {
         return instanceManager;
     }
 
+    /**
+     * get default xrpc.
+     * @return
+     */
     public static RNXRPCClient xrpc() {
         return xrpc;
+    }
+
+    /**
+     * get a xrpc with default context.
+     * @param context
+     * @return
+     */
+    public static RNXRPCClient newXrpc(Bundle context) {
+        return new RNXRPCClient(instanceManager, context);
     }
 }

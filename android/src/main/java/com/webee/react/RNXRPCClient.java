@@ -23,23 +23,35 @@ import rx.Observable.OnSubscribe;
 
 public class RNXRPCClient {
     private final ReactInstanceManager instanceManager;
+    private final Bundle defaultContext;
     public static final Map<String, AsyncSubject<Reply>> requests = new ConcurrentHashMap<>();
     public static final Map<String, Subscriber<? super Request>> procedures = new ConcurrentHashMap<>();
 
     public RNXRPCClient(ReactInstanceManager instanceManager) {
+        this(instanceManager, null);
+    }
+
+    public RNXRPCClient(ReactInstanceManager instanceManager, Bundle context) {
         this.instanceManager = instanceManager;
+        this.defaultContext = context;
+    }
+
+    public void emit(final String event, final Object[] args, final Bundle kwargs) {
+        emit(event, defaultContext, args, kwargs);
     }
 
     /**
      * emit a event to js.
-     * @param event event event.
+     * @param event
+     * @param context
      * @param args
      * @param kwargs
      */
-    public void emit(final String event, final Object[] args, final Bundle kwargs) {
+    public void emit(final String event, final Bundle context, final Object[] args, final Bundle kwargs) {
         WritableArray data = Arguments.createArray();
         data.pushInt(RNXRPCModule.XRPC_EVENT_EVENT);
         data.pushString(event);
+        data.pushMap(context != null ? Arguments.fromBundle(context) : null);
         data.pushArray(args != null ? Arguments.fromJavaArgs(args) : null);
         data.pushMap(kwargs != null ? Arguments.fromBundle(kwargs) : null);
 
@@ -61,14 +73,20 @@ public class RNXRPCClient {
         });
     }
 
+    public Observable<Reply> call(final String proc, final Object[] args, final Bundle kwargs) {
+        return call(proc, null, args, kwargs);
+    }
+
     /**
-     * call js procedure.
-     * @param proc procedure event
+     * call a js procedure.
+     * @param proc
+     * @param context
      * @param args
      * @param kwargs
      * @return
      */
-    public Observable<Reply> call(final String proc, final Object[] args, final Bundle kwargs) {
+    public Observable<Reply> call(final String proc, final Bundle context, final Object[] args, final Bundle kwargs) {
+        // TODO: add a call builder to build the context, args and kwargs.
         final AsyncSubject<Reply> replySubject = AsyncSubject.create();
         String rid = UUID.randomUUID().toString();
 
@@ -78,6 +96,7 @@ public class RNXRPCClient {
         data.pushInt(RNXRPCModule.XRPC_EVENT_CALL);
         data.pushString(rid);
         data.pushString(proc);
+        data.pushMap(context != null ? Arguments.fromBundle(context) : null);
         data.pushArray(args != null ? Arguments.fromJavaArgs(args) : null);
         data.pushMap(kwargs != null ? Arguments.fromBundle(kwargs) : null);
 

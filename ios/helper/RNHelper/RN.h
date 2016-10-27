@@ -17,4 +17,5 @@
 + (void)setupWithEnv:(NSString*) env andPort:(NSInteger)port andExtraModules:(NSArray<id<RCTBridgeModule>>*)extraModules launchOptions:(NSDictionary *)launchOptions;
 + (RCTBridge*) bridge;
 + (RNXRPCClient*) xrpc;
++ (RNXRPCClient*) newXrpc:(NSDictionary*)context;
 @end

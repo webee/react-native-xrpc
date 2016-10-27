@@ -57,6 +57,7 @@ RN.setup(this, BuildConfig.DEBUG, packages);
 // Now:
 // RN.inst() -> <ReactInstanceManager>
 // RN.xrpc() -> <RNXRPC>
+RN.newXrpc(Bundle context); // create a xrpc with default context.
 
 // add to mainifest
 <activity
@@ -73,6 +74,10 @@ xrpc
 RNXRPCClient xrpc = new RNXRPCClient(instanceManager);
 // or:
 RN.xrpc()...
+
+// call a js procedure with context.
+// context is a <key:value> bundle.
+xrpc.call("test.add", context, new Object[]{1, 2, 3, 4}, null)....
 
 // call a js procedure.
 xrpc.call("test.add", new Object[]{1, 2, 3, 4}, null)
@@ -179,6 +184,10 @@ xrpc.sub("test.event.toast")
 
 // emit event to js.
 xrpc.emit("test.event.log", new Object[]{"hello", 123}, null);
+
+// emit event to js with context.
+// context is a <key:value> bundle.
+xrpc.emit("test.event.log", context, new Object[]{"hello", 123}, null);
 ```
 
 ### IOS
@@ -194,6 +203,7 @@ helper
 // Now
 // [RN xrpc] -> <RNXRPC>
 // [RN bridge] -> <RCTBridge>
+[RN newXrpc:defaultContext] // create a xrpc with default context.
 
 // then, start a module
 UIViewController* vc = [[RNViewController alloc] initWithModule:@"HelloWorld" initialProperties:nil];
@@ -229,6 +239,11 @@ XRPC.register("test.add", (args, kwargs) => {
   return args.reduce((a, b)=>a+b);
 });
 
+// sync procedure with context.
+XRPC.register("test.user.add", (context, args, kwargs) => {
+  return context.user + args.reduce((a, b)=>a+b);
+}, {withContext:true});
+
 // async procedure
 XRPC.registerAsync("test.async", (args, kwargs, reply) => {
   let [n, m, d] = args;
@@ -246,6 +261,11 @@ XRPC.call("test.proc.add", 1, 2, 3, 4, 5)
 XRPC.subscribe("test.event.log", (args, kwargs) => {
   console.log(args, kwargs);
 });
+
+// subscribe native event with context.
+XRPC.subscribe("test.user.event.log", (context, args, kwargs) => {
+  console.log(context.user, args, kwargs);
+}, {withContext:true});
 
 // send event to native.
 XRPC.emit("test.event.toast", "hello");

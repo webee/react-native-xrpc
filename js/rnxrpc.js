@@ -23,6 +23,14 @@ function parseArgs(args) {
   return [args, {}];
 }
 
+function chooseArgs(options, context, args, kwargs) {
+  var xargs = [args, kwargs];
+  if (options.withContext) {
+    xargs = [context, args, kwargs];
+  }
+  return xargs;
+}
+
 class RNXRPC {
   _procedures: Object;
   _subscribers: Object;
@@ -50,19 +58,19 @@ class RNXRPC {
     }
   }
 
-  _handleEvent([event, args, kwargs]) {
+  _handleEvent([event, ...xargs]) {
     let f = this._subscribers[event];
     if (!(f instanceof Function)) {
       return;
     }
     try {
-      f(args, kwargs);
+      f(...chooseArgs(f.options, ...xargs));
     }catch(err) {
       console.error("event:", err);
     }
   }
 
-  _handleCall([rid, proc, args, kwargs]) {
+  _handleCall([rid, proc, ...xargs]) {
     let f = this._procedures[proc];
     if (!(f instanceof Function)) {
       return;
@@ -79,10 +87,10 @@ class RNXRPC {
     };
 
     try {
-      if (f.is_async) {
-        f(args, kwargs, replyAPI);
+      if (f.options.isAsync) {
+        f(...chooseArgs(f.options, ...xargs), replyAPI);
       } else {
-        let res = f(args, kwargs);
+        let res = f(...chooseArgs(f.options, ...xargs));
         replyAPI.reply(res);
       }
     }catch (err) {
@@ -104,7 +112,8 @@ class RNXRPC {
   // subscribe to native event.
   // NOTE:
   // one event one subscriber, to support other subscribers, do it in sub.
-  subscribe(event, sub) {
+  subscribe(event, sub, options={withContext:false}) {
+    sub.options = options;
     this._subscribers[event] = sub;
   }
 
@@ -118,14 +127,14 @@ class RNXRPC {
     return XRPC.call(proc, rargs, rkwargs);
   }
 
-  register(name, proc) {
-    proc.is_async = false;
+  register(name, proc, options={isAsync:false, withContext:false}) {
+    proc.options = options;
     this._procedures[name] = proc;
   }
 
+  // @deprecated since v0.2.0, use register instead.
   registerAsync(name, proc) {
-    proc.is_async = true;
-    this._procedures[name] = proc;
+    this.register(name, proc, {isAsync:true});
   }
 
   unregister(name) {
