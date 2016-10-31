@@ -12,7 +12,6 @@
 @interface RNBridgeDelegate ()
 
 @property (strong, nonatomic) NSString* env;
-@property (nonatomic, assign) NSInteger port;
 @property (strong, nonatomic) NSArray<id<RCTBridgeModule>>* extraModules;
 
 @end
@@ -23,13 +22,8 @@
 }
 
 - (instancetype)initWithEnv:(NSString*)env andExtraModules:(NSArray<id<RCTBridgeModule>>*)extranModules {
-    return [self initWithEnv:env andPort:8081 andExtraModules:extranModules];
-}
-
-- (instancetype)initWithEnv:(NSString*)env andPort:(NSInteger)port andExtraModules:(NSArray<id<RCTBridgeModule>>*)extranModules {
     if (self = [super init]) {
         _env = env;
-        _port = port;
         if (extranModules != nil) {
             _extraModules = extranModules;
         } else {
@@ -41,10 +35,9 @@
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge {
     if ([_env  isEqual: @"dev"]) {
-        NSString* serverURL = [[NSString alloc] initWithFormat:@"http://localhost:%d/index.ios.bundle?platform=ios", _port];
-        return [NSURL URLWithString:serverURL];
+        return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:@"rnbundle/index.ios"];
     } else {
-        return [[NSBundle mainBundle] URLForResource:@"./rnbundle/index.ios" withExtension:@"bundle"];
+        return [[NSBundle mainBundle] URLForResource:@"./rnbundle/index.ios" withExtension:@"jsbundle"];
     }
 }
 
