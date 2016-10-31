@@ -6,7 +6,7 @@ export function register(name) {
     v.xrpc = v.xrpc || {};
     v.xrpc.isProcedure = true;
     v.xrpc.procName = name;
-    v.xrpc.procedure = v;
+    v.xrpc.procedure = key;
   };
 }
 
@@ -16,7 +16,7 @@ export function subscribe(name) {
     v.xrpc = v.xrpc || {};
     v.xrpc.isSubscriber = true;
     v.xrpc.eventName = name;
-    v.xrpc.subscriber = v;
+    v.xrpc.subscriber = key;
   };
 }
 
@@ -54,16 +54,19 @@ export function xMod(target) {
   target.xrpcs = xrpcs;
 }
 
-export function registerXMod(mod, name) {
-  if (mod.xrpcs) {
-    name = name || mod.name;
-    for (let i in mod.xrpcs) {
-      let xrpc = mod.xrpcs[i];
+export function registerXMod(Mod, name, ...args) {
+  if (Mod.xrpcs) {
+    let inst = new Mod(...args);
+    name = name || Mod.name;
+    for (let i in Mod.xrpcs) {
+      let xrpc = Mod.xrpcs[i];
       if (xrpc.isProcedure) {
-        XRPC.register(name + '.' + xrpc.procName, xrpc.procedure, xrpc.options);
+        let procedure = inst[xrpc.procedure].bind(inst);
+        XRPC.register(name + '.' + xrpc.procName, procedure, xrpc.options);
       }
       if (xrpc.isSubscriber) {
-        XRPC.subscribe(name + '.' + xrpc.eventName, xrpc.subscriber, xrpc.options);
+        let subscriber = inst[xrpc.subscriber];
+        XRPC.subscribe(name + '.' + xrpc.eventName, subscriber, xrpc.options);
       }
     }
   }
