@@ -23,7 +23,7 @@ public class RN {
         ReactInstanceManager.Builder builder = ReactInstanceManager.builder()
                 .setApplication(application)
                 .setUseDeveloperSupport(isDev)
-                .setBundleAssetName("index.android.bundle")
+                .setBundleAssetName("index.android.jsbundle")
                 .setJSMainModuleName("index.android")
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .addPackage(new MainReactPackage());
@@ -33,8 +33,11 @@ public class RN {
         }
 
         instanceManager = builder.build();
-        instanceManager.createReactContextInBackground();
         xrpc = new RNXRPCClient(instanceManager);
+    }
+
+    public static void start() {
+        instanceManager.createReactContextInBackground();
     }
 
     public static ReactInstanceManager inst() {
@@ -56,5 +59,9 @@ public class RN {
      */
     public static RNXRPCClient newXrpc(Bundle context) {
         return new RNXRPCClient(instanceManager, context);
+    }
+
+    public static RNXRPCClient newXrpc() {
+        return new RNXRPCClient(instanceManager);
     }
 }
