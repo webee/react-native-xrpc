@@ -37,7 +37,7 @@
     context = context == nil ? @{} : context;
     args = args == nil ? @[] : args;
     kwargs = kwargs == nil ? @{} : kwargs;
-    NSArray* data = [[NSArray alloc] initWithObjects:[NSNumber numberWithInteger:XRPC_EVENT_EVENT], event, context, args, kwargs];
+    NSArray* data = @[[NSNumber numberWithInteger:XRPC_EVENT_EVENT], event, context, args, kwargs];
     [self.bridge.eventDispatcher sendAppEventWithName:XRPC_EVENT body:data];
 }
 
@@ -59,7 +59,7 @@
     context = context == nil ? @{} : context;
     args = args == nil ? @[] : args;
     kwargs = kwargs == nil ? @{} : kwargs;
-    NSArray* data = [[NSArray alloc] initWithObjects:[NSNumber numberWithInteger:XRPC_EVENT_CALL], rid, proc, context, args, kwargs];
+    NSArray* data = @[[NSNumber numberWithInteger:XRPC_EVENT_CALL], rid, proc, context, args, kwargs];
     [self.bridge.eventDispatcher sendAppEventWithName:XRPC_EVENT body:data];
 }
 
