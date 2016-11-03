@@ -65,7 +65,7 @@ export function registerXMod(Mod, name, ...args) {
         XRPC.register(name + '.' + xrpc.procName, procedure, xrpc.options);
       }
       if (xrpc.isSubscriber) {
-        let subscriber = inst[xrpc.subscriber];
+        let subscriber = inst[xrpc.subscriber].bind(inst);
         XRPC.subscribe(name + '.' + xrpc.eventName, subscriber, xrpc.options);
       }
     }
