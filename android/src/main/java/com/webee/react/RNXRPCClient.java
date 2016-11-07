@@ -61,6 +61,10 @@ public class RNXRPCClient {
         this.defaultContext = context;
     }
 
+    public Bundle getDefaultContext() {
+        return new Bundle(this.defaultContext);
+    }
+
     public void emit(final String event, final Object[] args, final Bundle kwargs) {
         emit(event, defaultContext, args, kwargs);
     }
