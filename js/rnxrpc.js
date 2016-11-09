@@ -24,6 +24,8 @@ function parseArgs(args) {
 }
 
 function chooseArgs(options, context, args, kwargs) {
+  args = args ? args : [];
+  kwargs = kwargs ? kwargs : {};
   var xargs = [args, kwargs];
   if (options.withContext) {
     xargs = [context, args, kwargs];
