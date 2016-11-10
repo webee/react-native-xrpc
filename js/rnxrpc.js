@@ -73,11 +73,7 @@ class RNXRPC {
     }
   }
 
-  _handleCall([rid, proc, ...xargs]) {
-    let f = this._procedures[proc];
-    if (!(f instanceof Function)) {
-      return;
-    }
+  async _handleCall([rid, proc, ...xargs]) {
     let replyAPI = {
       reply: (...args) => {
         let [rargs, rkwargs] = parseArgs(args);
@@ -88,12 +84,20 @@ class RNXRPC {
         XRPC.emit(XRPC._EVENT_REPLY_ERROR, [rid, err, rargs, rkwargs])
       }
     };
+    let f = this._procedures[proc];
+    if (!(f instanceof Function)) {
+      replyAPI.error("procedure not registered");
+      return;
+    }
 
     try {
       if (f.options.isAsync) {
         f(...chooseArgs(f.options, ...xargs), replyAPI);
       } else {
         let res = f(...chooseArgs(f.options, ...xargs));
+        if (res instanceof Promise) {
+          res = await res;
+        }
         replyAPI.reply(res);
       }
     }catch (err) {
