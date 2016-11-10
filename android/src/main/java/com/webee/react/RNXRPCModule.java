@@ -83,7 +83,11 @@ public class RNXRPCModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void call(final String proc, final ReadableArray args, final ReadableMap kwargs, final Promise promise) {
         Subscriber<? super Request> subscriber = RNXRPCClient.procedures.get(proc);
-        subscriber.onNext(new Request(getReactApplicationContext(), args, kwargs, promise));
+        if (subscriber != null) {
+            subscriber.onNext(new Request(getReactApplicationContext(), args, kwargs, promise));
+        } else {
+            promise.reject("XRPC_ERROR", "PROCEDURE NOT REGISTERED");
+        }
     }
 
     private void handleEvent(ReadableArray xargs) {
