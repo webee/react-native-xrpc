@@ -113,6 +113,7 @@ class RNXRPC {
   // emit sent event to native.
   emit(event, ...args) {
     let [rargs, rkwargs] = parseArgs(args);
+    console.debug('xrpc emit:', event, rargs, rkwargs);
     XRPC.emit(XRPC._EVENT_EVENT, [event, rargs, rkwargs]);
   }
 
@@ -133,6 +134,7 @@ class RNXRPC {
   // call native procedure.
   call(proc, ...args) {
     let [rargs, rkwargs] = parseArgs(args);
+    console.debug('xrpc call:', proc, rargs, rkwargs);
     return XRPC.call(proc, rargs, rkwargs);
   }
 
