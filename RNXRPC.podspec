@@ -4,7 +4,7 @@ package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 Pod::Spec.new do |s|
   s.name                = "RNXRPC"
-  s.version             = "0.2.5"
+  s.version             = "0.2.12"
   s.summary             = package['description']
   s.description         = <<-DESC
                             RNXRPC enables pub/sub and rpc between natives and js for react-native.

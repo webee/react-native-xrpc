@@ -54,10 +54,22 @@ static NSString* const APP_EXIT_EVENT = @"native.app.exit";
         _appExitSubID = [[RN xrpc] sub:APP_EXIT_EVENT onEvent:^(RNXRPCEvent *event) {
             NSString* aid = event.args[0];
             if (aid == nil || aid == [NSNull null]) {
-                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (weakSelf.navigationController) {
+                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                    } else {
+                        [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                    }
+                });
             } else {
                 if ([weakSelf.appInstID isEqualToString:aid]) {
-                    [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (weakSelf.navigationController) {
+                            [weakSelf.navigationController popViewControllerAnimated:YES];
+                        } else {
+                            [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                        }
+                    });
                 }
             }
         }];
