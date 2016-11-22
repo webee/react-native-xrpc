@@ -7,6 +7,8 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
+import com.webee.promise.Deferred;
+import com.webee.promise.Promise;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +20,6 @@ import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
 import rx.functions.Func1;
-import rx.subjects.AsyncSubject;
 
 
 /**
@@ -30,7 +31,7 @@ public class RNXRPCClient {
     private transient ReactContext reactContext;
     private Bundle defaultContext;
     private List<XRPCArgs> eventArgs = new LinkedList<>();
-    public static final Map<String, AsyncSubject<Reply>> requests = new ConcurrentHashMap<>();
+    public static final Map<String, Deferred<Reply>> requests = new ConcurrentHashMap<>();
     public static final Map<String, Subscriber<? super Request>> procedures = new ConcurrentHashMap<>();
 
     public RNXRPCClient(ReactInstanceManager instanceManager) {
@@ -109,7 +110,7 @@ public class RNXRPCClient {
         });
     }
 
-    public Observable<Reply> call(final String proc, final Object[] args, final Bundle kwargs) {
+    public Promise<Reply> call(final String proc, final Object[] args, final Bundle kwargs) {
         return call(proc, defaultContext, args, kwargs);
     }
 
@@ -122,16 +123,16 @@ public class RNXRPCClient {
      * @param kwargs
      * @return
      */
-    public Observable<Reply> call(final String proc, final Bundle context, final Object[] args, final Bundle kwargs) {
+    public Promise<Reply> call(final String proc, final Bundle context, final Object[] args, final Bundle kwargs) {
         // TODO: add a call builder to build the context, args and kwargs.
-        final AsyncSubject<Reply> replySubject = AsyncSubject.create();
+        final Deferred<Reply> deferred = new Deferred<>();
         String rid = UUID.randomUUID().toString();
 
-        requests.put(rid, replySubject);
+        requests.put(rid, deferred);
 
         doCall(rid, proc, context, args, kwargs);
 
-        return replySubject;
+        return deferred.promise;
     }
 
     private void doCall(final String rid, final String proc, final Bundle context, final Object[] args, final Bundle kwargs) {

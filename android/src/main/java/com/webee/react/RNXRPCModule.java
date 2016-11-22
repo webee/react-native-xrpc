@@ -11,13 +11,13 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
+import com.webee.promise.Deferred;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.subjects.AsyncSubject;
 import rx.subjects.PublishSubject;
 
 import static com.webee.react.RNXRPCClient.requests;
@@ -99,22 +99,21 @@ public class RNXRPCModule extends ReactContextBaseJavaModule {
 
     private void handleCallReply(ReadableArray xargs) {
         String rid = xargs.getString(0);
-        AsyncSubject<Reply> replySubject = RNXRPCClient.requests.remove(rid);
-        if (replySubject == null) {
+        Deferred<Reply> replyDeferred = RNXRPCClient.requests.remove(rid);
+        if (replyDeferred == null) {
             return;
         }
 
         ReadableArray args = xargs.getArray(1);
         ReadableMap kwargs = xargs.getMap(2);
 
-        replySubject.onNext(new Reply(args, kwargs));
-        replySubject.onCompleted();
+        replyDeferred.fulfill(new Reply(args, kwargs));
     }
 
     private void handleCallReplyError(ReadableArray xargs) {
         String rid = xargs.getString(0);
-        AsyncSubject<Reply> replySubject = requests.remove(rid);
-        if (replySubject == null) {
+        Deferred<Reply> replyDeferred = requests.remove(rid);
+        if (replyDeferred == null) {
             return;
         }
 
@@ -122,7 +121,7 @@ public class RNXRPCModule extends ReactContextBaseJavaModule {
         ReadableArray args = xargs.getArray(2);
         ReadableMap kwargs = xargs.getMap(3);
 
-        replySubject.onError(new XRPCError(error, args, kwargs));
+        replyDeferred.reject(new XRPCError(error, args, kwargs));
     }
 
     public static Observable<Event> event() {
