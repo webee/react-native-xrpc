@@ -11,7 +11,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
-import com.webee.promise.Deferred;
+import com.github.webee.promise.Deferred;
 
 import java.util.HashMap;
 import java.util.Map;

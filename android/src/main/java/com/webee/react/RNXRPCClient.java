@@ -7,8 +7,8 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
-import com.webee.promise.Deferred;
-import com.webee.promise.Promise;
+import com.github.webee.promise.Deferred;
+import com.github.webee.promise.Promise;
 
 import java.util.LinkedList;
 import java.util.List;
