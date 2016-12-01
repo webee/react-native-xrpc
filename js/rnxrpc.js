@@ -49,7 +49,7 @@ class RNXRPC {
   }
 
   _handleXRPCEvent([e, ...args]) {
-    console.debug('xrpc event:', e, ...args);
+    console.log('xrpc event:', e, ...args);
     switch (e) {
       case XRPC._EVENT_CALL:
       this._handleCall(args);
@@ -113,7 +113,7 @@ class RNXRPC {
   // emit sent event to native.
   emit(event, ...args) {
     let [rargs, rkwargs] = parseArgs(args);
-    console.debug('xrpc emit:', event, rargs, rkwargs);
+    console.log('xrpc emit:', event, rargs, rkwargs);
     XRPC.emit(XRPC._EVENT_EVENT, [event, rargs, rkwargs]);
   }
 
@@ -121,25 +121,25 @@ class RNXRPC {
   // NOTE:
   // one event one subscriber, to support other subscribers, do it in sub.
   subscribe(event, sub, options={withContext:false}) {
-    console.debug('xrpc subscribe:', event, options);
+    console.log('xrpc subscribe:', event, options);
     sub.options = options;
     this._subscribers[event] = sub;
   }
 
   unsubscribe(event) {
     delete this._subscribers[event];
-    console.debug('xrpc unsubscribe:', event);
+    console.log('xrpc unsubscribe:', event);
   }
 
   // call native procedure.
   call(proc, ...args) {
     let [rargs, rkwargs] = parseArgs(args);
-    console.debug('xrpc call:', proc, rargs, rkwargs);
+    console.log('xrpc call:', proc, rargs, rkwargs);
     return XRPC.call(proc, rargs, rkwargs);
   }
 
   register(name, proc, options={isAsync:false, withContext:false}) {
-    console.debug('xrpc register:', name, options);
+    console.log('xrpc register:', name, options);
     proc.options = options;
     this._procedures[name] = proc;
   }
@@ -151,7 +151,7 @@ class RNXRPC {
 
   unregister(name) {
     delete this._procedures[name];
-    console.debug('xrpc unregister:', name);
+    console.log('xrpc unregister:', name);
   }
 }
 
