@@ -34,7 +34,7 @@ pod 'RNXRPC', :path => '../node_modules/react-native-xrpc', :subspecs => [
   Add new RNXRPCPackage() to ReactInstanceManager builder.
 OR:
 ```java
-compile 'com.github.webee:react-native-utils-android:v0.4.0'
+compile 'com.github.webee:react-native-utils-android:v0.6.0'
 ```
 
 ## Usage
