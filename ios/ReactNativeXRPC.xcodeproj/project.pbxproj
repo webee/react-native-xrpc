@@ -1,0 +1,320 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6BC52010C85B3EFB5992DA8C /* RNXRPCClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC526B692320DCBA73D5313 /* RNXRPCClient.m */; };
+		6BC52198CC3D5FC9A4D09CB5 /* RN.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC52169C4987E1FD8DFE084 /* RN.m */; };
+		6BC524D20DF9E3B9DB593329 /* RNBridgeDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC52D82AC16D1DC3FFF4C38 /* RNBridgeDelegate.m */; };
+		6BC52630960212D0EF0D0D11 /* RNXRPCEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC52CED2810659C7BE67880 /* RNXRPCEvent.m */; };
+		6BC527BF507D638F175C354F /* RNXRPCReply.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC52CE847E74EAD30796364 /* RNXRPCReply.m */; };
+		6BC52AB71A5B7F7AE9BC2BE9 /* RNViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC526B26BB9EA56A5B9BAED /* RNViewController.m */; };
+		6BC52C591137460B0D220EE4 /* RNXRPCRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC529623B06BB5EA3F6A0B0 /* RNXRPCRequest.m */; };
+		6BC52CCB98A18A32372867A3 /* RNXRPC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC528552643F162337C4455 /* RNXRPC.m */; };
+		6BC52DBFD7F442C57FE3A0D8 /* RNXRPCError.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC526F043FD237367F61BA5 /* RNXRPCError.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D0EE585F1E0AF07F00A66664 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		6BC52169C4987E1FD8DFE084 /* RN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RN.m; sourceTree = "<group>"; };
+		6BC5218B20435F8416FFF7BE /* RNXRPCRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNXRPCRequest.h; sourceTree = "<group>"; };
+		6BC52688DF8DF8F226B676E1 /* RNXRPC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNXRPC.h; sourceTree = "<group>"; };
+		6BC526B26BB9EA56A5B9BAED /* RNViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNViewController.m; sourceTree = "<group>"; };
+		6BC526B692320DCBA73D5313 /* RNXRPCClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNXRPCClient.m; sourceTree = "<group>"; };
+		6BC526F043FD237367F61BA5 /* RNXRPCError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNXRPCError.m; sourceTree = "<group>"; };
+		6BC527240FAFF59DBBB52E9A /* RNXRPCClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNXRPCClient.h; sourceTree = "<group>"; };
+		6BC528552643F162337C4455 /* RNXRPC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNXRPC.m; sourceTree = "<group>"; };
+		6BC529623B06BB5EA3F6A0B0 /* RNXRPCRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNXRPCRequest.m; sourceTree = "<group>"; };
+		6BC52BB58609376ED59E77C4 /* RN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RN.h; sourceTree = "<group>"; };
+		6BC52CCB2D6DAF9BA0039805 /* RNXRPCReply.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNXRPCReply.h; sourceTree = "<group>"; };
+		6BC52CE847E74EAD30796364 /* RNXRPCReply.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNXRPCReply.m; sourceTree = "<group>"; };
+		6BC52CED2810659C7BE67880 /* RNXRPCEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNXRPCEvent.m; sourceTree = "<group>"; };
+		6BC52CEE4D96D0DB23F9BBEA /* RNXRPCError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNXRPCError.h; sourceTree = "<group>"; };
+		6BC52CF39AAA52A535D21697 /* RNBridgeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNBridgeDelegate.h; sourceTree = "<group>"; };
+		6BC52D82AC16D1DC3FFF4C38 /* RNBridgeDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNBridgeDelegate.m; sourceTree = "<group>"; };
+		6BC52DE4400713B0483943EA /* RNXRPCEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNXRPCEvent.h; sourceTree = "<group>"; };
+		6BC52F17B1C781CE1C0CC477 /* RNViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNViewController.h; sourceTree = "<group>"; };
+		D0EE58611E0AF08000A66664 /* libReactNativeXRPC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReactNativeXRPC.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D0EE585E1E0AF07F00A66664 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6BC5233637CFDA2A1C851C2D /* RNHelper */ = {
+			isa = PBXGroup;
+			children = (
+				6BC52BB58609376ED59E77C4 /* RN.h */,
+				6BC52169C4987E1FD8DFE084 /* RN.m */,
+				6BC52CF39AAA52A535D21697 /* RNBridgeDelegate.h */,
+				6BC52D82AC16D1DC3FFF4C38 /* RNBridgeDelegate.m */,
+				6BC52F17B1C781CE1C0CC477 /* RNViewController.h */,
+				6BC526B26BB9EA56A5B9BAED /* RNViewController.m */,
+			);
+			path = RNHelper;
+			sourceTree = "<group>";
+		};
+		D0EE58581E0AF07F00A66664 = {
+			isa = PBXGroup;
+			children = (
+				D0EE58631E0AF08000A66664 /* ReactNativeXRPC */,
+				D0EE58621E0AF08000A66664 /* Products */,
+				6BC5233637CFDA2A1C851C2D /* RNHelper */,
+			);
+			sourceTree = "<group>";
+		};
+		D0EE58621E0AF08000A66664 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D0EE58611E0AF08000A66664 /* libReactNativeXRPC.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D0EE58631E0AF08000A66664 /* ReactNativeXRPC */ = {
+			isa = PBXGroup;
+			children = (
+				6BC52688DF8DF8F226B676E1 /* RNXRPC.h */,
+				6BC528552643F162337C4455 /* RNXRPC.m */,
+				6BC527240FAFF59DBBB52E9A /* RNXRPCClient.h */,
+				6BC526B692320DCBA73D5313 /* RNXRPCClient.m */,
+				6BC52CEE4D96D0DB23F9BBEA /* RNXRPCError.h */,
+				6BC526F043FD237367F61BA5 /* RNXRPCError.m */,
+				6BC52DE4400713B0483943EA /* RNXRPCEvent.h */,
+				6BC52CED2810659C7BE67880 /* RNXRPCEvent.m */,
+				6BC52CCB2D6DAF9BA0039805 /* RNXRPCReply.h */,
+				6BC52CE847E74EAD30796364 /* RNXRPCReply.m */,
+				6BC5218B20435F8416FFF7BE /* RNXRPCRequest.h */,
+				6BC529623B06BB5EA3F6A0B0 /* RNXRPCRequest.m */,
+			);
+			path = ReactNativeXRPC;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D0EE58601E0AF07F00A66664 /* ReactNativeXRPC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0EE586A1E0AF08000A66664 /* Build configuration list for PBXNativeTarget "ReactNativeXRPC" */;
+			buildPhases = (
+				D0EE585D1E0AF07F00A66664 /* Sources */,
+				D0EE585E1E0AF07F00A66664 /* Frameworks */,
+				D0EE585F1E0AF07F00A66664 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReactNativeXRPC;
+			productName = ReactNativeXRPC;
+			productReference = D0EE58611E0AF08000A66664 /* libReactNativeXRPC.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D0EE58591E0AF07F00A66664 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = qqwj.com;
+				TargetAttributes = {
+					D0EE58601E0AF07F00A66664 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 72UGSDEHWZ;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = D0EE585C1E0AF07F00A66664 /* Build configuration list for PBXProject "ReactNativeXRPC" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = D0EE58581E0AF07F00A66664;
+			productRefGroup = D0EE58621E0AF08000A66664 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D0EE58601E0AF07F00A66664 /* ReactNativeXRPC */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D0EE585D1E0AF07F00A66664 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6BC52CCB98A18A32372867A3 /* RNXRPC.m in Sources */,
+				6BC52010C85B3EFB5992DA8C /* RNXRPCClient.m in Sources */,
+				6BC52DBFD7F442C57FE3A0D8 /* RNXRPCError.m in Sources */,
+				6BC52630960212D0EF0D0D11 /* RNXRPCEvent.m in Sources */,
+				6BC527BF507D638F175C354F /* RNXRPCReply.m in Sources */,
+				6BC52C591137460B0D220EE4 /* RNXRPCRequest.m in Sources */,
+				6BC52198CC3D5FC9A4D09CB5 /* RN.m in Sources */,
+				6BC524D20DF9E3B9DB593329 /* RNBridgeDelegate.m in Sources */,
+				6BC52AB71A5B7F7AE9BC2BE9 /* RNViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		D0EE58681E0AF08000A66664 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		D0EE58691E0AF08000A66664 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D0EE586B1E0AF08000A66664 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 72UGSDEHWZ;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		D0EE586C1E0AF08000A66664 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 72UGSDEHWZ;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D0EE585C1E0AF07F00A66664 /* Build configuration list for PBXProject "ReactNativeXRPC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0EE58681E0AF08000A66664 /* Debug */,
+				D0EE58691E0AF08000A66664 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D0EE586A1E0AF08000A66664 /* Build configuration list for PBXNativeTarget "ReactNativeXRPC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0EE586B1E0AF08000A66664 /* Debug */,
+				D0EE586C1E0AF08000A66664 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D0EE58591E0AF07F00A66664 /* Project object */;
+}

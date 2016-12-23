@@ -7,7 +7,7 @@
 //
 
 #import "RNBridgeDelegate.h"
-#import "RCTBundleURLProvider.h"
+#import <React/RCTBundleURLProvider.h>
 
 @interface RNBridgeDelegate ()
 

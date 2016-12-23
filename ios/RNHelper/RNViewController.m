@@ -7,20 +7,22 @@
 //
 
 #import "RNViewController.h"
-#import "RCTRootView.h"
+#import <React/RCTRootView.h>
 #import "RN.h"
+#import "RACDisposable.h"
 
 @interface RNViewController ()
 
 @property (strong, nonatomic) NSString* appInstID;
-@property (strong, nonatomic) NSString* appExitSubID;
 
 @end
 
 static NSString* const APP_INST_ID_PROP = @"appInstID";
 static NSString* const APP_EXIT_EVENT = @"native.app.exit";
 
-@implementation RNViewController
+@implementation RNViewController {
+    RACDisposable* _subAppExit;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -43,7 +45,7 @@ static NSString* const APP_EXIT_EVENT = @"native.app.exit";
 */
 
 -(void) dealloc {
-    [[RN xrpc] unsub:APP_EXIT_EVENT subID:_appExitSubID];
+    [_subAppExit dispose];
 }
 
 -(id) init {
@@ -51,8 +53,8 @@ static NSString* const APP_EXIT_EVENT = @"native.app.exit";
         _appInstID = [[NSUUID UUID] UUIDString];
         __weak RNViewController* weakSelf = self;
         // subscribe exit app event.
-        _appExitSubID = [[RN xrpc] sub:APP_EXIT_EVENT onEvent:^(RNXRPCEvent *event) {
-            NSString* aid = event.args[0];
+        _subAppExit = [[[RN xrpc] sub:APP_EXIT_EVENT] subscribeNext:^(RNXRPCEvent *e) {
+            id aid = e.args[0];
             if (aid == nil || aid == [NSNull null]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (weakSelf.navigationController) {
@@ -61,16 +63,14 @@ static NSString* const APP_EXIT_EVENT = @"native.app.exit";
                         [weakSelf dismissViewControllerAnimated:YES completion:nil];
                     }
                 });
-            } else {
-                if ([weakSelf.appInstID isEqualToString:aid]) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (weakSelf.navigationController) {
-                            [weakSelf.navigationController popViewControllerAnimated:YES];
-                        } else {
-                            [weakSelf dismissViewControllerAnimated:YES completion:nil];
-                        }
-                    });
-                }
+            } else if ([weakSelf.appInstID isEqualToString:aid]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (weakSelf.navigationController) {
+                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                    } else {
+                        [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                    }
+                });
             }
         }];
     }

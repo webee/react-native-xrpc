@@ -6,12 +6,12 @@
 //
 //
 #import <Foundation/Foundation.h>
-#import "RCTBridgeModule.h"
-#import "RCTBridge.h"
+#import <React/RCTBridgeModule.h>
+#import <React/RCTBridge.h>
 
 @interface RNXRPCRequest: NSObject
 
-@property (nonatomic, strong, readonly) RCTBridge* bridge;
+@property (nonatomic, weak, readonly) RCTBridge* bridge;
 @property (nonatomic, strong, readonly) NSArray* args;
 @property (nonatomic, strong, readonly) NSDictionary* kwargs;
 @property (nonatomic, strong, readonly) RCTPromiseResolveBlock resolve;

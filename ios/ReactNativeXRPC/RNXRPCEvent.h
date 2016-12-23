@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RCTBridge.h"
+#import <React/RCTBridge.h>
 
 @interface RNXRPCEvent: NSObject
 
-@property (nonatomic, strong, readonly) RCTBridge* bridge;
+@property (nonatomic, weak, readonly) RCTBridge* bridge;
+@property (nonatomic, strong, readonly) NSString* event;
 @property (nonatomic, strong, readonly) NSArray* args;
 @property (nonatomic, strong, readonly) NSDictionary* kwargs;
 
-- (instancetype)initWithArgs:(RCTBridge*)bridge args:(NSArray*)args kwargs:(NSDictionary*)kwargs;
+- (instancetype)initWithArgs:(RCTBridge*)bridge event:(NSString*)event args:(NSArray*)args kwargs:(NSDictionary*)kwargs;
 @end

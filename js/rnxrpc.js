@@ -1,15 +1,14 @@
 /**
-*
 * @providesModule RNXRPC
 * @flow
 */
 
 const {
-  NativeAppEventEmitter,
   NativeModules: {
     XRPC
   }
 } = require('react-native');
+import XRPCEventEmitter from './XRPCEventEmitter';
 
 function parseArgs(args) {
   // [...] => [[...]]
@@ -42,7 +41,8 @@ class RNXRPC {
     this.C = XRPC.C;
     this._procedures = {};
     this._subscribers = {};
-    this._xrpcSub = NativeAppEventEmitter.addListener(
+    console.log('xrpc start listen');
+    this._xrpcSub = XRPCEventEmitter.addListener(
       XRPC._XRPC_EVENT,
       this._handleXRPCEvent.bind(this)
     );

@@ -9,9 +9,10 @@
 
 @implementation RNXRPCEvent
 
-- (instancetype)initWithArgs:(RCTBridge*)bridge args:(NSArray*)args kwargs:(NSDictionary*)kwargs {
+- (instancetype)initWithArgs:(RCTBridge*)bridge event:(NSString*)event args:(NSArray*)args kwargs:(NSDictionary*)kwargs {
     if (self = [super init]) {
         _bridge = bridge;
+        _event = event;
         _args = args;
         _kwargs = kwargs;
     }

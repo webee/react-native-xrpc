@@ -1,0 +1,4 @@
+[submodule "android"]
+	path = android
+	url = https://github.com/webee/react-native-xrpc-android.git
+	branch = master

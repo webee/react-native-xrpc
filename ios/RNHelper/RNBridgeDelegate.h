@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RCTBridgeDelegate.h"
+#import <React/RCTBridgeDelegate.h>
 
 @interface RNBridgeDelegate: NSObject <RCTBridgeDelegate>
 - (instancetype)initWithEnv:(NSString*)env;
