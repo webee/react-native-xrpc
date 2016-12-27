@@ -61,13 +61,16 @@ class RNXRPC {
     }
   }
 
-  _handleEvent([event, ...xargs]) {
+  async _handleEvent([event, ...xargs]) {
     let f = this._subscribers[event];
     if (!(f instanceof Function)) {
       return;
     }
     try {
-      f(...chooseArgs(f.options, ...xargs));
+      let res = f(...chooseArgs(f.options, ...xargs));
+      if (res instanceof Promise) {
+        await res;
+      }
     }catch(err) {
       console.error("event:", err);
     }
@@ -92,7 +95,10 @@ class RNXRPC {
 
     try {
       if (f.options.isAsync) {
-        f(...chooseArgs(f.options, ...xargs), replyAPI);
+        let res = f(...chooseArgs(f.options, ...xargs), replyAPI);
+        if (res instanceof Promise) {
+          await res;
+        }
       } else {
         let res = f(...chooseArgs(f.options, ...xargs));
         if (res instanceof Promise) {
@@ -101,7 +107,7 @@ class RNXRPC {
         replyAPI.reply(res);
       }
     }catch (err) {
-      console.error(err);
+      console.error("call:", err);
       replyAPI.error(err.toString());
     }
   }
