@@ -72,7 +72,7 @@ class RNXRPC {
         await res;
       }
     }catch(err) {
-      console.error("event:", err);
+      console.error(`event:${err}`);
     }
   }
 
@@ -107,7 +107,7 @@ class RNXRPC {
         replyAPI.reply(res);
       }
     }catch (err) {
-      console.error("call:", err);
+      console.error(`call:${err}`);
       replyAPI.error(err.toString());
     }
   }
