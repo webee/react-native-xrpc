@@ -78,6 +78,11 @@ class RNXRPC {
 
   async _handleCall([rid, proc, ...xargs]) {
     let replyAPI = {
+      replyNext: (...args) => {
+        let [rargs, rkwargs] = parseArgs(args);
+        // rid, args, kwargs, hasNext
+        XRPC.emit(XRPC._EVENT_REPLY, [rid, rargs, rkwargs, true])
+      },
       reply: (...args) => {
         let [rargs, rkwargs] = parseArgs(args);
         XRPC.emit(XRPC._EVENT_REPLY, [rid, rargs, rkwargs])
