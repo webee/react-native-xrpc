@@ -54,7 +54,7 @@ export function xMod(target) {
   target.xrpcs = xrpcs;
 }
 
-export function registerXMod(Mod, name, ...args) {
+export function registerXMod(name, Mod, ...args) {
   if (Mod.xrpcs) {
     let inst = new Mod(...args);
     name = name || Mod.name;
