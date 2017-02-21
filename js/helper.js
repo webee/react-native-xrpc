@@ -12,9 +12,16 @@ export class EntryComponent extends Component {
     let {appInstID} = props;
     let self = this;
     self.backSub = BackAndroid.addEventListener('hardwareBackPress', function() {
-      self.backSub.remove();
       exitApp(appInstID);
       return false;
     });
+  }
+
+  componentWillUnmount() {
+    let self = this;
+    if (self.backSub) {
+      self.backSub.remove();
+      self.backSub = undefined;
+    }
   }
 }
