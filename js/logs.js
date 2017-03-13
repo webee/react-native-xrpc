@@ -1,8 +1,10 @@
 export function setLog(enable) {
   console.info(`${enable ? "enable" : "disable"} log`);
   if (!enable) {
-    console.__log__ = console.log;
-    console.log = () => {};
+    if (!console.__log__) {
+      console.__log__ = console.log;
+      console.log = () => {};
+    }
   } else {
     if (console.__log__)  {
       console.log = console.__log__;
