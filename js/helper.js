@@ -11,6 +11,7 @@ export class EntryComponent extends Component {
     super(props);
     let {appInstID} = props;
     let self = this;
+    self.appInstID = appInstID;
     self.backSub = BackAndroid.addEventListener('hardwareBackPress', function() {
       exitApp(appInstID);
       return false;
