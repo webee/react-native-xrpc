@@ -41,7 +41,7 @@ class RNXRPC {
     this.C = XRPC.C;
     this._procedures = {};
     this._subscribers = {};
-    console.log('xrpc start listen');
+    console.info('xrpc start listen');
     this._xrpcSub = XRPCEventEmitter.addListener(
       XRPC._XRPC_EVENT,
       this._handleXRPCEvent.bind(this)
@@ -132,14 +132,14 @@ class RNXRPC {
   // NOTE:
   // one event one subscriber, to support other subscribers, do it in sub.
   subscribe(event, sub, options={withContext:false}) {
-    console.log('xrpc subscribe:', event, options);
+    console.info('xrpc subscribe:', event, options);
     sub.options = options;
     this._subscribers[event] = sub;
   }
 
   unsubscribe(event) {
     delete this._subscribers[event];
-    console.log('xrpc unsubscribe:', event);
+    console.info('xrpc unsubscribe:', event);
   }
 
   // call native procedure.
@@ -150,7 +150,7 @@ class RNXRPC {
   }
 
   register(name, proc, options={isAsync:false, withContext:false}) {
-    console.log('xrpc register:', name, options);
+    console.info('xrpc register:', name, options);
     proc.options = options;
     this._procedures[name] = proc;
   }
@@ -162,7 +162,7 @@ class RNXRPC {
 
   unregister(name) {
     delete this._procedures[name];
-    console.log('xrpc unregister:', name);
+    console.info('xrpc unregister:', name);
   }
 }
 
