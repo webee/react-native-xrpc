@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "babel -w js --out-dir dist",
     "build": "babel --compact true --minified js --out-dir dist",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "keywords": [
     "react-native",
