@@ -1,21 +1,17 @@
 /**
-* @providesModule RNXRPC
-* @flow
-*/
+ * @providesModule RNXRPC
+ * @flow
+ */
 
-const {
-  NativeModules: {
-    XRPC
-  }
-} = require('react-native');
-import XRPCEventEmitter from './XRPCEventEmitter';
+const { NativeModules: { XRPC } } = require("react-native");
+import XRPCEventEmitter from "./XRPCEventEmitter";
 
 function parseArgs(args) {
   // [...] => [[...]]
   // [..., undefined, Object] => [[...], Object]
   if (args.length >= 2) {
     let [s, rkwargs] = args.slice(-2);
-    if (s === undefined && (!(rkwargs instanceof Array) && (rkwargs instanceof Object))) {
+    if (s === undefined && (!(rkwargs instanceof Array) && rkwargs instanceof Object)) {
       return [args.slice(0, -2), rkwargs];
     }
   }
@@ -41,22 +37,19 @@ class RNXRPC {
     this.C = XRPC.C;
     this._procedures = {};
     this._subscribers = {};
-    console.info('xrpc start listen');
-    this._xrpcSub = XRPCEventEmitter.addListener(
-      XRPC._XRPC_EVENT,
-      this._handleXRPCEvent.bind(this)
-    );
+    console.info("xrpc start listen");
+    this._xrpcSub = XRPCEventEmitter.addListener(XRPC._XRPC_EVENT, this._handleXRPCEvent.bind(this));
   }
 
   _handleXRPCEvent([e, ...args]) {
-    console.log('xrpc event:', e, ...args);
+    console.log("xrpc event:", e, args);
     switch (e) {
       case XRPC._EVENT_CALL:
-      this._handleCall(args);
-      break;
+        this._handleCall(args);
+        break;
       case XRPC._EVENT_EVENT:
-      this._handleEvent(args);
-      break;
+        this._handleEvent(args);
+        break;
       default:
     }
   }
@@ -71,8 +64,8 @@ class RNXRPC {
       if (res instanceof Promise) {
         await res;
       }
-    }catch(err) {
-      console.error(`event{${event}, ${xargs}}:${err}`);
+    } catch (err) {
+      console.error("[event]", event, xargs, err);
     }
   }
 
@@ -81,15 +74,15 @@ class RNXRPC {
       replyNext: (...args) => {
         let [rargs, rkwargs] = parseArgs(args);
         // rid, args, kwargs, hasNext
-        XRPC.emit(XRPC._EVENT_REPLY, [rid, rargs, rkwargs, true])
+        XRPC.emit(XRPC._EVENT_REPLY, [rid, rargs, rkwargs, true]);
       },
       reply: (...args) => {
         let [rargs, rkwargs] = parseArgs(args);
-        XRPC.emit(XRPC._EVENT_REPLY, [rid, rargs, rkwargs])
+        XRPC.emit(XRPC._EVENT_REPLY, [rid, rargs, rkwargs]);
       },
       error: (err, ...args) => {
         let [rargs, rkwargs] = parseArgs(args);
-        XRPC.emit(XRPC._EVENT_REPLY_ERROR, [rid, err, rargs, rkwargs])
+        XRPC.emit(XRPC._EVENT_REPLY_ERROR, [rid, err, rargs, rkwargs]);
       }
     };
     let f = this._procedures[proc];
@@ -111,8 +104,8 @@ class RNXRPC {
         }
         replyAPI.reply(res);
       }
-    }catch (err) {
-      console.error(`call{${rid}, ${proc}, ${xargs}}:${err}`);
+    } catch (err) {
+      console.error("[call]", rid, proc, xargs, err);
       replyAPI.error(err.toString());
     }
   }
@@ -124,45 +117,45 @@ class RNXRPC {
   // emit sent event to native.
   emit(event, ...args) {
     let [rargs, rkwargs] = parseArgs(args);
-    console.log('xrpc emit:', event, rargs, rkwargs);
+    console.log("xrpc emit:", event, rargs, rkwargs);
     XRPC.emit(XRPC._EVENT_EVENT, [event, rargs, rkwargs]);
   }
 
   // subscribe to native event.
   // NOTE:
   // one event one subscriber, to support other subscribers, do it in sub.
-  subscribe(event, sub, options={withContext:false}) {
-    console.info('xrpc subscribe:', event, options);
+  subscribe(event, sub, options = { withContext: false }) {
+    console.info("xrpc subscribe:", event, options);
     sub.options = options;
     this._subscribers[event] = sub;
   }
 
   unsubscribe(event) {
     delete this._subscribers[event];
-    console.info('xrpc unsubscribe:', event);
+    console.info("xrpc unsubscribe:", event);
   }
 
   // call native procedure.
   call(proc, ...args) {
     let [rargs, rkwargs] = parseArgs(args);
-    console.log('xrpc call:', proc, rargs, rkwargs);
+    console.log("xrpc call:", proc, rargs, rkwargs);
     return XRPC.call(proc, rargs, rkwargs);
   }
 
-  register(name, proc, options={isAsync:false, withContext:false}) {
-    console.info('xrpc register:', name, options);
+  register(name, proc, options = { isAsync: false, withContext: false }) {
+    console.info("xrpc register:", name, options);
     proc.options = options;
     this._procedures[name] = proc;
   }
 
   // @deprecated since v0.2.0, use register instead.
   registerAsync(name, proc) {
-    this.register(name, proc, {isAsync:true});
+    this.register(name, proc, { isAsync: true });
   }
 
   unregister(name) {
     delete this._procedures[name];
-    console.info('xrpc unregister:', name);
+    console.info("xrpc unregister:", name);
   }
 }
 
